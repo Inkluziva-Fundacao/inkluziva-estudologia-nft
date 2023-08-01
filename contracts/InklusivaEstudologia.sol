@@ -10,7 +10,9 @@ import '@openzeppelin/contracts/utils/Counters.sol';
 
 contract InklusivaEstudologia is ERC721Enumerable, Ownable {
     using Counters for Counters.Counter;
-    constructor(string memory _name, string memory _symbol) ERC721(_name, _symbol) {}
+    constructor(string memory _name, string memory _symbol, address _owner) ERC721(_name, _symbol) {
+        _transferOwnership(_owner);
+    }
 
     Counters.Counter private _tokenIds;
     mapping(uint256 => string) internal _tokensURI;
