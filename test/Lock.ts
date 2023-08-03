@@ -25,7 +25,7 @@ describe("Certificado NFT", () => {
       const { nft, nftAddress } = await loadFixture(deployNFT)
       const ethereumAddressRegex = /^(0x)?[0-9a-fA-F]{40}$/
       expect(ethereumAddressRegex.test(nftAddress)).to.equal(true)
-    })
+    })  
   })
 
   describe("Balance before mint", async (): Promise<void> => {
@@ -41,22 +41,22 @@ describe("Certificado NFT", () => {
       const { nft, owner } = await loadFixture(deployNFT)
       const tx = await nft.mint(owner)
       tx.wait()
-      const balance = await nft.balanceOf(owner)
+      const balance = await nft.balanceOf(owner.address)
       expect(balance).to.equal(BigInt(1))
     })
   })
 
   describe("Balance after second mint", async (): Promise<void> => {
-    it("Should return the balance of the owner as 2n", async () => {
+    it("Should return the balance of the owner as 1n", async () => {
       const { nft, owner } = await loadFixture(deployNFT)
-      const [ tx0, tx1 ] = await Promise.all([nft.mint(owner), nft.mint(owner)])
+      const [ tx0, tx1 ] = await Promise.all([nft.mint(owner.address), nft.mint(owner.address)])
       const balance = await nft.balanceOf(owner)
       expect(balance).to.equal(BigInt(2))
     })
   })
 
   describe("Token owner", async (): Promise<void> => {
-    it("Should return the balance of the owner as 2n", async () => {
+    it("Should confirm ownership of token 0 and token 1", async () => {
       const { nft, owner } = await loadFixture(deployNFT)
       const [ tx0, tx1 ] = await Promise.all([nft.mint(owner), nft.mint(owner)])
       const balance = await nft.balanceOf(owner)
@@ -70,12 +70,14 @@ describe("Certificado NFT", () => {
     })
   })
 
-  describe("Token owner", async (): Promise<void> => {
+  describe("Token transfer", async (): Promise<void> => {
     it("Should return the balance of the owner as 2n", async () => {
       const { nft, owner, otherAccount } = await loadFixture(deployNFT)
-      const tx = await nft.transferFrom(owner, otherAccount)
-      tx.wait()
-      const balanceOther = await nft.balanceOf(otherAccount)
+      const tx0 = await nft.mint(owner);
+      tx0.wait()
+      const tx1 = await nft.transferFrom(owner.address, otherAccount.address, BigInt(0))
+      tx1.wait()
+      const balanceOther = await nft.balanceOf(otherAccount.address)
       expect(balanceOther).to.equal(BigInt(1))
     })
   })
