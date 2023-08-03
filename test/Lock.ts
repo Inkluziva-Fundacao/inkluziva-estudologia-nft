@@ -4,13 +4,15 @@ import {
 import { anyValue } from "@nomicfoundation/hardhat-chai-matchers/withArgs";
 import { expect } from "chai";
 import { ethers } from "hardhat";
+import { ZeroAddress } from "ethers";
 
 describe("Certificado NFT", () => {
   const deployNFT = async (): Promise<any> => {
     try {
       const [owner, otherAccount] = await ethers.getSigners()
       const NFT = await ethers.getContractFactory("InklusivaEstudologia")
-      const nft = await NFT.deploy("MyNFT", "NFT")
+      //@ts-ignore
+      const nft = await NFT.deploy("MyNFT", "NFT", owner.address)
       const nftAddress = await nft.getAddress()
       return { nft, nftAddress, owner, otherAccount }
     } catch (error: any) {
