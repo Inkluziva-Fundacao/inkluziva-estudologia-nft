@@ -11,14 +11,14 @@ async function main() {
   const InklusivaEstudologiaFactory = await ethers.getContractFactory("InklusivaEstudologia");
   const inklusivaEstudologia = await InklusivaEstudologiaFactory.deploy("Inklusiva Estudologia NFT", "INK-EST", deployer.address);
 
-  const deployed = await inklusivaEstudologia.deployed();
+  const deployed = await inklusivaEstudologia.waitForDeployment();
 
-  console.log("InklusivaEstudologia contract deployed to:", inklusivaEstudologia.address);
+  console.log("InklusivaEstudologia contract deployed to:", inklusivaEstudologia.target);
 
   const table = new Table();
   table.push(
     { "Owner": deployer.address },
-    { "Contract": inklusivaEstudologia.address }
+    { "Contract": inklusivaEstudologia.target }
   );
 
   console.log(table.toString());
