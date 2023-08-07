@@ -1,27 +1,32 @@
-import { ethers } from "hardhat";
+import hre from "hardhat";
+import Table from "cli-table3"; // Import Table directly
 
 async function main() {
-  const currentTimestampInSeconds = Math.round(Date.now() / 1000);
-  const unlockTime = currentTimestampInSeconds + 60;
+  const { ethers } = hre
+  const [deployer] = await ethers.getSigners();
 
-  const lockedAmount = ethers.parseEther("0.001");
+  console.log("Deploying contracts with the account:", deployer.address);
 
-  const lock = await ethers.deployContract("Lock", [unlockTime], {
-    value: lockedAmount,
-  });
+  // Import the contract factory with TypeScript typings
+  const InklusivaEstudologiaFactory = await ethers.getContractFactory("InklusivaEstudologia");
+  const inklusivaEstudologia = await InklusivaEstudologiaFactory.deploy("Inklusiva Estudologia NFT", "INK-EST", deployer.address);
 
-  await lock.waitForDeployment();
+  const deployed = await inklusivaEstudologia.deployed();
 
-  console.log(
-    `Lock with ${ethers.formatEther(
-      lockedAmount
-    )}ETH and unlock timestamp ${unlockTime} deployed to ${lock.target}`
+  console.log("InklusivaEstudologia contract deployed to:", inklusivaEstudologia.address);
+
+  const table = new Table();
+  table.push(
+    { "Owner": deployer.address },
+    { "Contract": inklusivaEstudologia.address }
   );
+
+  console.log(table.toString());
 }
 
-// We recommend this pattern to be able to use async/await everywhere
-// and properly handle errors.
-main().catch((error) => {
-  console.error(error);
-  process.exitCode = 1;
-});
+main()
+  .then(() => process.exit(0))
+  .catch((error) => {
+    console.error(error.message);
+    process.exit(1);
+  });
