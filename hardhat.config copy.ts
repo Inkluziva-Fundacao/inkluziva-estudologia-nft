@@ -14,7 +14,7 @@ module.exports = {
       accounts: [PRIVATE_KEY], // Add your private key here
     },
     sepolia: {
-      url: SEPOLIA_RPC_URL || "https://eth-sepolia.g.alchemy.com/v2/nNguqH9FvZx6tnBYErtZ-v4FjMBV4Lsc",
+      url: SEPOLIA_RPC_URL || "https://rpc2.sepolia.org",
       accounts: [PRIVATE_KEY], // Add your private key here
     }
   },
